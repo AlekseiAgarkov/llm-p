@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime, UTC
-from typing import List
+from typing import List, Tuple
 from uuid import UUID
 
 from sqlalchemy import String, DateTime, ForeignKey, Index, Uuid, func
@@ -22,7 +22,7 @@ class User(Base):
                                                               back_populates="user",
                                                               cascade="all, delete-orphan")
 
-    __table_args__ = (
+    __table_args__: Tuple[Index] = (
         Index("idx_lower_email", func.lower(email), unique=True),
     )
 
@@ -42,6 +42,6 @@ class ChatMessage(Base):
     user: Mapped["User"] = relationship("User",
                                         back_populates="chat_messages")
 
-    __table_args__ = (
+    __table_args__: Tuple[Index] = (
         Index("ix_chat_messages_user_created", "user_id", "created_at"),
     )

@@ -1,5 +1,6 @@
 from datetime import datetime
 from time import sleep
+from typing import Optional, Iterable, List, TypeVar
 from unittest import TestCase
 from uuid import UUID
 
@@ -12,6 +13,8 @@ from app.db.models import User, ChatMessage
 
 
 class BaseTestClass(TestCase):
+    user: User
+    session: Session
     engine: Engine
 
     @classmethod
@@ -90,7 +93,7 @@ class TestUser(BaseTestClass):
         self.session.add(user)
         self.session.commit()
 
-        found = self.session.query(User).filter(User.email.ilike("user@example.com")).first()
+        found: Optional[User] = self.session.query(User).filter(User.email.ilike("user@example.com")).first()
         self.assertEqual(user.id, found.id)
 
 
@@ -164,7 +167,8 @@ class TestUserChatMessageRelationship(BaseTestClass):
         self.session.add(msg2)
         self.session.commit()
 
-        messages = self.session.query(ChatMessage).filter(
+        # noinspection PyTypeChecker
+        messages: List[ChatMessage] = self.session.query(ChatMessage).filter(
             ChatMessage.user_id == self.user.id
         ).order_by(ChatMessage.created_at).all()
 
@@ -172,7 +176,7 @@ class TestUserChatMessageRelationship(BaseTestClass):
         self.assertEqual("Second", messages[1].content)
 
     def test_bulk_message_creation(self):
-        messages = [
+        messages: List[ChatMessage] = [
             ChatMessage(user_id=self.user.id, role="user", content=f"Bulk Message {i}")
             for i in range(10)
         ]
