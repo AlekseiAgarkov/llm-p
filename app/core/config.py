@@ -4,7 +4,7 @@ from typing import List
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-__all__ = ["settings"]
+__all__ = ["settings", "Settings"]
 
 
 class Settings(BaseSettings):

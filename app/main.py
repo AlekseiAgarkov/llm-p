@@ -1,13 +1,15 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.core.config import settings
+from app.api.deps import get_settings
+from app.core.config import Settings
 from app.db import models  # noqa: F401
 from app.db.base import Base
 from app.db.session import engine
 
 
 def create_app() -> FastAPI:
+    settings: Settings = get_settings()
     app: FastAPI = FastAPI(title=settings.APP_NAME)
 
     if settings.ENABLE_CORS:
