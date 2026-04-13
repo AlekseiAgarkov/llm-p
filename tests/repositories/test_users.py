@@ -1,4 +1,5 @@
 import asyncio
+import uuid
 from typing import Optional
 from unittest import IsolatedAsyncioTestCase
 
@@ -37,7 +38,7 @@ class TestUserRepository(IsolatedAsyncioTestCase):
         self.email = "ceo@yandex.ru"
         self.password_hash = "стойкий_пароль_сео"
         self.non_existent_email = "404@yandex.ru"
-        self.non_existent_id = 404
+        self.non_existent_id = uuid.uuid4()
 
     async def asyncTearDown(self):
         await self.session.rollback()

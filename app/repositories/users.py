@@ -1,4 +1,5 @@
-from typing import Optional
+from typing import Optional, Union
+from uuid import UUID
 
 from sqlalchemy import select, Result
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -19,7 +20,8 @@ class UserRepository:
         await self._session.refresh(user)
         return user
 
-    async def get_by_id(self, user_id: int) -> Optional[User]:
+    async def get_by_id(self, user_id: Union[str, UUID]) -> Optional[User]:
+        user_id = user_id if isinstance(user_id, UUID) else UUID(user_id)
         result: Result[tuple[User]] = await self._session.execute(select(User).where(User.id == user_id))
         return result.scalar_one_or_none()
 
