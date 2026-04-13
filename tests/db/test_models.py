@@ -1,6 +1,6 @@
 from datetime import datetime
 from time import sleep
-from typing import Optional, Iterable, List, TypeVar
+from typing import Optional, List
 from unittest import TestCase
 from uuid import UUID
 
