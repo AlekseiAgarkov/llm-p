@@ -5,16 +5,18 @@ from app.core.security import verify_password, create_access_token, decode_token
 
 
 class TestSecurity(TestCase):
-    def setUp(self):
-        self.settings = Settings(_env_file=".env.example")
+    settings: Settings
+    jwt_secret: str
+    jwt_algorithm: str
+    jwt_expire_minutes: int
 
-        self.sub = "sub"
-        self.jwt_secret = self.settings.JWT_SECRET
-        self.jwt_algorithm = self.settings.JWT_ALG
-        self.jwt_expire_minutes = self.settings.ACCESS_TOKEN_EXPIRE_MINUTES
-
-    def tearDown(self):
-        del self.settings
+    @classmethod
+    def setUpClass(cls):
+        cls.settings = Settings(_env_file=".env.example")
+        cls.sub = "sub"
+        cls.jwt_secret = cls.settings.JWT_SECRET
+        cls.jwt_algorithm = cls.settings.JWT_ALG
+        cls.jwt_expire_minutes = cls.settings.ACCESS_TOKEN_EXPIRE_MINUTES
 
     def test_verify_password(self):
         self.assertTrue(verify_password(plain_password="password",
