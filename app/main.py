@@ -35,6 +35,4 @@ def create_app() -> FastAPI:
     return app
 
 
-# testing tests
-
 app = create_app()
