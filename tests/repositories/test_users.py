@@ -36,7 +36,7 @@ class TestUserRepository(IsolatedAsyncioTestCase):
         self.user_repo = UserRepository(self.session)
 
         self.email = "ceo@yandex.ru"
-        self.password_hash = "стойкий_пароль_сео"
+        self.password_hash = "хэш_стойкого_пароля_сео"
         self.non_existent_email = "404@yandex.ru"
         self.non_existent_id = uuid.uuid4()
 
