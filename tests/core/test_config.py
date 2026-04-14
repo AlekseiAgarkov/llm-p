@@ -18,6 +18,6 @@ class TestSettings(TestCase):
 
         self.assertEqual("change_me_openrouter_api_key", test_settings.OPENROUTER_API_KEY)
         self.assertEqual("https://openrouter.ai/api/v1", test_settings.OPENROUTER_BASE_URL)
-        self.assertEqual("stepfun/step-3.5-flash:free", test_settings.OPENROUTER_MODEL)
+        self.assertEqual("openrouter/free", test_settings.OPENROUTER_MODEL)
         self.assertEqual("https://example.com", test_settings.OPENROUTER_SITE_URL)
         self.assertEqual("llm-fastapi-openrouter", test_settings.OPENROUTER_APP_NAME)
