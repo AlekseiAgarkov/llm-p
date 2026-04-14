@@ -12,3 +12,7 @@ class UnauthorizedError(AppDomainError):
 
 class NotFoundError(AppDomainError):
     pass
+
+
+class ExternalServiceError(AppDomainError):
+    pass
