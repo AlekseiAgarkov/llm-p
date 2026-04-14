@@ -10,7 +10,9 @@ from app.core.security import decode_token
 from app.db.session import AsyncSessionLocal, engine
 from app.repositories.chat_messages import ChatMessageRepository
 from app.repositories.users import UserRepository
+from app.services.openrouter_client import OpenRouterClient
 from app.usecases.auth import AuthUseCase
+from app.usecases.chat import ChatUseCase
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 OAuth2PasswordRequestFormDep: Type[OAuth2PasswordRequestForm] = Annotated[OAuth2PasswordRequestForm, Depends()]
@@ -36,14 +38,14 @@ SessionDep: Type[AsyncSession] = Annotated[AsyncSession, Depends(get_session)]
 
 
 def get_user_repository(session: SessionDep) -> UserRepository:
-    return UserRepository(session)
+    return UserRepository(session=session)
 
 
 UserRepositoryDep: Type[UserRepository] = Annotated[UserRepository, Depends(get_user_repository)]
 
 
 def get_auth_usecase(user_repository: UserRepositoryDep, settings: SettingsDep) -> AuthUseCase:
-    return AuthUseCase(user_repository, settings)
+    return AuthUseCase(user_repository=user_repository, settings=settings)
 
 
 AuthUseCaseDep: Type[AuthUseCase] = Annotated[AuthUseCase, Depends(get_auth_usecase)]
@@ -72,8 +74,23 @@ CurrentUserId: Type[UUID] = Annotated[UUID, Depends(get_current_user_id)]
 
 
 def get_chat_messages_repository(session: SessionDep) -> ChatMessageRepository:
-    return ChatMessageRepository(session)
+    return ChatMessageRepository(session=session)
 
 
 ChatMessageRepositoryDep: Type[ChatMessageRepository] = Annotated[
     ChatMessageRepository, Depends(get_chat_messages_repository)]
+
+
+def get_openrouter_client(settings: SettingsDep) -> OpenRouterClient:
+    return OpenRouterClient(settings=settings)
+
+
+OpenRouterClientDep: Type[OpenRouterClient] = Annotated[
+    OpenRouterClient, Depends(get_openrouter_client)]
+
+
+def get_chat_usecase(chat_repo: ChatMessageRepositoryDep, openrouter_client: OpenRouterClientDep) -> ChatUseCase:
+    return ChatUseCase(chat_repo=chat_repo, openrouter_client=openrouter_client)
+
+
+ChatUseCaseDep: Type[ChatUseCase] = Annotated[ChatUseCase, Depends(get_chat_usecase)]
