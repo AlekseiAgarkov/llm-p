@@ -4,9 +4,9 @@ from uuid import UUID
 from app.core.config import Settings
 from app.core.errors import NotFoundError, UnauthorizedError, EmailAlreadyRegisteredError
 from app.core.security import create_access_token, hash_password, verify_password
+from app.db.models import User
 from app.repositories.users import UserRepository
 from app.schemas.user import UserPublic
-from app.db.models import User
 
 
 class AuthUseCase:
