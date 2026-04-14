@@ -8,6 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession, AsyncEngine
 from app.core.config import settings, Settings
 from app.core.security import decode_token
 from app.db.session import AsyncSessionLocal, engine
+from app.repositories.chat_messages import ChatMessageRepository
 from app.repositories.users import UserRepository
 from app.usecases.auth import AuthUseCase
 
@@ -68,3 +69,11 @@ async def get_current_user_id(token: Annotated[str, Depends(oauth2_scheme)], set
 
 
 CurrentUserId: Type[UUID] = Annotated[UUID, Depends(get_current_user_id)]
+
+
+def get_chat_messages_repository(session: SessionDep) -> ChatMessageRepository:
+    return ChatMessageRepository(session)
+
+
+ChatMessageRepositoryDep: Type[ChatMessageRepository] = Annotated[
+    ChatMessageRepository, Depends(get_chat_messages_repository)]
