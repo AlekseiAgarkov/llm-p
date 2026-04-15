@@ -45,8 +45,7 @@ source .venv/bin/activate
 
 Windows:
 
-```shell 
- 
+```shell
 .venv\Scripts\activate.bat
 ```
 
