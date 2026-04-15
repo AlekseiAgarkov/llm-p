@@ -13,6 +13,6 @@ class ChatRequest(BaseModel):
 
 
 class ChatResponse(BaseModel):
-    answer: str
+    answer: str = Field(..., alias="content")
 
     model_config = ConfigDict(frozen=True)

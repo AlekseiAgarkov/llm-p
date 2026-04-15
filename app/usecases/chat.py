@@ -4,6 +4,7 @@ from uuid import UUID
 from app.repositories.chat_messages import ChatMessageRepository
 from app.schemas.chat import ChatResponse
 from app.services.openrouter_client import OpenRouterClient, OpenRouterMessage
+from app.db.models import ChatMessage
 
 
 class ChatUseCase:
@@ -35,8 +36,9 @@ class ChatUseCase:
         return answer
 
     async def get_history(self, user_id: UUID, limit: int = 100) -> List[ChatResponse]:
-        messages = await self._chat_repo.get_recent(user_id, limit=limit)
-        return [ChatResponse.model_validate(msg) for msg in messages]
+        messages: list[ChatMessage] = await self._chat_repo.get_recent(user_id, limit=limit)
+        print([msg.__dict__ for msg in messages])
+        return [ChatResponse.model_validate(msg.__dict__) for msg in messages]
 
     async def clear_history(self, user_id: UUID) -> None:
         await self._chat_repo.delete_all_for_user(user_id)
