@@ -4,6 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncEngine
 
 from app.api.deps import get_settings, get_engine
 from app.api.routes_auth import router as auth_router
+from app.api.routes_chat import router as chat_router
 from app.core.config import Settings
 from app.db import models  # noqa: F401
 from app.db.base import Base
@@ -35,6 +36,7 @@ def create_app() -> FastAPI:
         return {"status": "ok", "environment": settings.ENV}
 
     app.include_router(auth_router, prefix="/auth", tags=["auth"])
+    app.include_router(chat_router, prefix="/chat", tags=["chat"])
 
     return app
 
