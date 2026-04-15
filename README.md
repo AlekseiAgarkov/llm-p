@@ -3,8 +3,9 @@
 Репозиторий проекта "Защищённый API для работы с большой языковой моделью", Курс «Принципы разработки на языке
 Python», группа M25-555.
 
-Целью данной работы является разработка серверного приложения на FastAPI, предоставляющего защищённый API для
-взаимодействия с большой языковой моделью (LLM) через сервис OpenRouter.
+Целью данной работы является разработка серверного приложения на [FastAPI](https://fastapi.tiangolo.com/),
+предоставляющего защищённый API для взаимодействия с большой языковой моделью (LLM) через
+сервис [OpenRouter](https://openrouter.ai/).
 
 В рамках задания реализованы:
 
@@ -63,12 +64,12 @@ uv pip install -r <(uv pip compile pyproject.toml)
 cp .env.example .env
 ```
 
-Зарегистрируйтесь на OpenRouter и получите API ключ
+Зарегистрируйтесь на [OpenRouter](https://openrouter.ai/) и [получите API ключ](https://openrouter.ai/settings/keys).
 
 Добавьте свой ключ в переменную `OPENROUTER_API_KEY` в файле `.env`.
 
-По умолчанию для OpenRouter указана модель `openrouter/free`, но Вы можете изменить её на другую в переменной
-`OPENROUTER_MODEL`.
+По умолчанию для OpenRouter указана модель [openrouter/free](https://openrouter.ai/openrouter/free), но Вы можете
+изменить её на другую в переменной `OPENROUTER_MODEL`.
 
 ## Запуск проекта
 
