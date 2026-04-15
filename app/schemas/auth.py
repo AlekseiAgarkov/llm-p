@@ -8,9 +8,7 @@ class RegisterRequest(BaseModel):
     email: EmailStr
     password: str = Field(..., min_length=8, max_length=16)
 
-    model_config = ConfigDict(frozen=True,
-                              str_strip_whitespace=True,
-                              extra="forbid")
+    model_config = ConfigDict(frozen=True, str_strip_whitespace=True, extra="forbid")
 
 
 @dataclass
