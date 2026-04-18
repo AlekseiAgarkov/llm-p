@@ -1,6 +1,6 @@
 from typing import Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, AliasChoices
 
 
 class ChatRequest(BaseModel):
@@ -13,6 +13,6 @@ class ChatRequest(BaseModel):
 
 
 class ChatResponse(BaseModel):
-    answer: str = Field(..., alias="content")
+    answer: str = Field(..., validation_alias=AliasChoices('content', 'answer'))
 
     model_config = ConfigDict(frozen=True)
