@@ -1,5 +1,7 @@
 from unittest import TestCase
 
+from jose import jwt
+
 from app.core.config import Settings
 from app.core.security import verify_password, create_access_token, decode_token, JWTTokenType
 
@@ -23,7 +25,7 @@ class TestSecurity(TestCase):
                                         password_hash="$2b$12$egYdvOrgav9UfJ79ei2T2.gIAXIo0Rkmj9iO65VTzsunvToFjFaMy"))
 
     def test_decode_access_token(self):
-        token = create_access_token(
+        token: str = create_access_token(
             sub=self.sub,
             jwt_secret=self.jwt_secret,
             jwt_algorithm=self.jwt_algorithm,
@@ -35,3 +37,28 @@ class TestSecurity(TestCase):
 
         self.assertEqual(self.sub, decoded_token["sub"])
         self.assertEqual(JWTTokenType.access.name, decoded_token["type"])
+
+    def test_fails_on_malformed_token(self):
+        token: str = create_access_token(
+            sub=self.sub,
+            jwt_secret=self.jwt_secret,
+            jwt_algorithm=self.jwt_algorithm,
+            token_expire_minutes=self.jwt_expire_minutes)
+
+        malformed_token = ".".join([part[::-1] for part in token.split(".")])
+        with self.assertRaises(jwt.JWTError):
+            decode_token(token=malformed_token,
+                         jwt_secret=self.jwt_secret,
+                         jwt_algorithm=self.jwt_algorithm)
+
+    def test_expiration_check(self):
+        token = create_access_token(
+            sub=self.sub,
+            jwt_secret=self.jwt_secret,
+            jwt_algorithm=self.jwt_algorithm,
+            token_expire_minutes=-1)
+
+        with self.assertRaises(jwt.ExpiredSignatureError):
+            decode_token(token=token,
+                         jwt_secret=self.jwt_secret,
+                         jwt_algorithm=self.jwt_algorithm)

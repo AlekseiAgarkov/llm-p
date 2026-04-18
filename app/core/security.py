@@ -84,5 +84,17 @@ def create_access_token(sub: str, jwt_secret: str, jwt_algorithm: str, token_exp
     return jwt.encode(payload, jwt_secret, algorithm=jwt_algorithm)
 
 
+def is_expired(decoded_payload: Dict[str, Any]) -> bool:
+    exp = decoded_payload.get('exp')
+    if not exp:
+        return False
+    return _now() > exp
+
+
 def decode_token(token: str, jwt_secret: str, jwt_algorithm: str) -> Dict[str, Any]:
-    return jwt.decode(token, jwt_secret, algorithms=[jwt_algorithm])
+    decoded = jwt.decode(token, jwt_secret, algorithms=[jwt_algorithm])
+
+    if is_expired(decoded):
+        raise jwt.ExpiredSignatureError("Token has expired")
+
+    return decoded
