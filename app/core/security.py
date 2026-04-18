@@ -1,8 +1,7 @@
-import uuid
 from dataclasses import dataclass
 from datetime import datetime, UTC
 from enum import Enum
-from typing import Tuple, Dict, Any
+from typing import Dict, Any
 
 import bcrypt
 from fastapi.security import HTTPBasic
@@ -39,7 +38,6 @@ __all__ = ["security",
            "hash_password",
            "verify_password",
            "create_access_token",
-           "create_refresh_token",
            "decode_token"]
 
 
@@ -84,17 +82,6 @@ def create_access_token(sub: str, jwt_secret: str, jwt_algorithm: str, token_exp
                                    iat=now,
                                    exp=now + token_expire_minutes).__dict__
     return jwt.encode(payload, jwt_secret, algorithm=jwt_algorithm)
-
-
-def create_refresh_token(sub: str, jwt_secret: str, jwt_algorithm: str, token_expire_minutes: int) -> Tuple[str, str]:
-    now: int = _now()
-    payload: dict = JWTRefreshToken(sub=sub,
-                                    type=JWTTokenType.refresh.name,
-                                    jti=uuid.uuid4().hex,
-                                    iat=now,
-                                    exp=now + token_expire_minutes).__dict__
-    token = jwt.encode(payload, jwt_secret, algorithm=jwt_algorithm)
-    return token, payload['jti']
 
 
 def decode_token(token: str, jwt_secret: str, jwt_algorithm: str) -> Dict[str, Any]:

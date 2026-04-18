@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from app.core.config import Settings
-from app.core.security import verify_password, create_access_token, decode_token, JWTTokenType, create_refresh_token
+from app.core.security import verify_password, create_access_token, decode_token, JWTTokenType
 
 
 class TestSecurity(TestCase):
@@ -35,17 +35,3 @@ class TestSecurity(TestCase):
 
         self.assertEqual(self.sub, decoded_token["sub"])
         self.assertEqual(JWTTokenType.access.name, decoded_token["type"])
-
-    def test_decode_refresh_token(self):
-        token, _ = create_refresh_token(
-            sub=self.sub,
-            jwt_secret=self.jwt_secret,
-            jwt_algorithm=self.jwt_algorithm,
-            token_expire_minutes=self.jwt_expire_minutes)
-
-        decoded_token = decode_token(token=token,
-                                     jwt_secret=self.jwt_secret,
-                                     jwt_algorithm=self.jwt_algorithm)
-
-        self.assertEqual(self.sub, decoded_token["sub"])
-        self.assertEqual(JWTTokenType.refresh.name, decoded_token["type"])
